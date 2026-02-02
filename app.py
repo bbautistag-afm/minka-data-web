@@ -1,11 +1,11 @@
+import streamlit as st
 import pdfplumber
 import pandas as pd
 import os
 import re
-from google.colab import drive
+import io
 
 # --- FASE 1: CONEXIÓN ---
-drive.mount('/content/drive', force_remount=True)
 
 def limpiar(t):
     return re.sub(r'\s+', ' ', str(t)).strip() if t else ""
