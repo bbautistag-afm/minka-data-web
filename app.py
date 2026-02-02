@@ -4,6 +4,8 @@ import pandas as pd
 import os
 import re
 import io
+st.title("💎 MINKA-DATA: Procesador Web de Actas")
+st.markdown("### 🏛️ UGEL Melgar - Innovación Tecnológica")
 
 # --- FASE 1: CONEXIÓN ---
 
