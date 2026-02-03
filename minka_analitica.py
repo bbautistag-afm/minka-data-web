@@ -30,7 +30,7 @@ with st.sidebar:
     st.info("📊 Monitoreo Estratégico para el Liderazgo Pedagógico.")
 
 # --- CUERPO PRINCIPAL ---
-st.title("📈 MINKA-DATA: Inteligencia de Datos")
+st.title("📈 MINKA DATA: Datos y decisiones")
 st.markdown("#### 🏛️ Diagnóstico de Compromisos de Gestión Escolar (CGE 1 y 2)")
 
 def limpiar(t):
