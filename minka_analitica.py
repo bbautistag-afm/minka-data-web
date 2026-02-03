@@ -17,7 +17,7 @@ def limpiar_datos():
 # --- BARRA LATERAL ---
 with st.sidebar:
     st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=200)
-    st.markdown("### **AREA DE GESTIÓN PEDAGÓGICA**")
+    st.markdown("### **Área de Gestión Pedagógica**")
     st.markdown("---")
     st.markdown("""
     <div style="font-size: 11px; line-height: 1.2; color: #555;">
