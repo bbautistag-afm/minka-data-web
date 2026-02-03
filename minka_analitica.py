@@ -18,12 +18,12 @@ def limpiar_campos():
 # Barra lateral con Logo e Identidad
 with st.sidebar:
     st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=200)
-    st.title("UGEL - GESTIÓN PEI")
+    st.title("GESTIÓN ESCOLAR")
     st.markdown("---")
     if st.button("♻️ LIMPIAR TODO"):
         limpiar_campos()
 
-st.title("📊 MINKA-DATA: Inteligencia Gerencial")
+st.title("📊 MINKA-DATA: Analítica para el Liderazgo Pedagógico")
 st.markdown("### 🏛️ Diagnóstico de Gestión Escolar (CGE 1 y 2)")
 
 # --- FUNCIONES ---
