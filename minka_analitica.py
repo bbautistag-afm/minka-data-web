@@ -5,7 +5,7 @@ import re
 import io
 
 # 1. CONFIGURACIÓN E IDENTIDAD INSTITUCIONAL
-st.set_page_config(page_title="Minka-Data ANALÍTICA", page_icon="📈", layout="wide")
+st.set_page_config(page_title="Minka-Data Analítica para el Liderazgo Pedagógico", page_icon="📈", layout="wide")
 
 if 'reset_key' not in st.session_state:
     st.session_state.reset_key = 0
@@ -17,7 +17,7 @@ def limpiar_campos():
 # --- BARRA LATERAL CON IDENTIDAD Y AUTORÍA ---
 with st.sidebar:
     # Logo Institucional
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Logo_del_Ministerio_de_Educaci%C3%B3n_del_Per%C3%BA.svg/1200px-Logo_del_Ministerio_de_Educaci%C3%B3n_del_Per%C3%BA.svg.png", width=220)
+    st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=220)
     
     st.title("UGEL MELGAR")
     st.subheader("Gestión de Evidencia")
