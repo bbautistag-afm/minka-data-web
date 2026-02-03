@@ -16,8 +16,8 @@ def limpiar_datos():
 
 # --- BARRA LATERAL ---
 with st.sidebar:
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Logo_del_Ministerio_de_Educaci%C3%B3n_del_Per%C3%BA.svg/1200px-Logo_del_Ministerio_de_Educaci%C3%B3n_del_Per%C3%BA.svg.png", width=200)
-    st.markdown("### **UGEL MELGAR**")
+    st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=200)
+    st.markdown("### **AREA DE GESTIÓN PEDAGÓGICA**")
     st.markdown("---")
     st.markdown("""
     <div style="font-size: 11px; line-height: 1.2; color: #555;">
@@ -30,7 +30,7 @@ with st.sidebar:
     st.info("📊 Monitoreo Estratégico para el Liderazgo Pedagógico.")
 
 # --- CUERPO PRINCIPAL ---
-st.title("📈 MINKA-DATA: Inteligencia de Gestión Educativa")
+st.title("📈 MINKA-DATA: Inteligencia de Datos")
 st.markdown("#### 🏛️ Diagnóstico de Compromisos de Gestión Escolar (CGE 1 y 2)")
 
 def limpiar(t):
