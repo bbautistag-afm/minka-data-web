@@ -14,7 +14,7 @@ if 'reset_key' not in st.session_state:
 col1, col2 = st.columns([1, 5])
 with col1:
     # Tu escudo oficial de la UGEL Melgar (vía ImgBB o link directo)
-    st.image("https://i.ibb.co/647ea5.jpg", width=110) # He usado el ID de tu última captura
+    st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=110) # He usado el ID de tu última captura
 with col2:
     st.title("💎 MINKA-DATA: Procesador Web de Actas")
     st.markdown("### 🏛️ UGEL Melgar - Innovación Tecnológica")
