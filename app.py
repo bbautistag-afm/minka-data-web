@@ -4,21 +4,21 @@ import pandas as pd
 import re
 import io
 
-# 1. CONFIGURACIÓN DE PÁGINA Y ESCUDO OFICIAL
+# 1. CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="Minka-Data Melgar", page_icon="💎", layout="wide")
 
 # Inicializamos la llave de reseteo si no existe
 if 'reset_key' not in st.session_state:
     st.session_state.reset_key = 0
 
-# --- NUEVA BARRA LATERAL DE AUTORÍA ---
+# --- BARRA LATERAL (Único lugar con el Logo y Autoría) ---
 with st.sidebar:
-    # Logo UGEL Melgar 
+    # Logo UGEL Melgar - Única ubicación para evitar duplicidad
     st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=180)
-    st.markdown("### **UGEL MELGAR**")
+    st.markdown("### **Área de Gestión Pedagógica**")
     st.markdown("---")
     
-    # Bloque de Autoría con estilo profesional y estrecho
+    # Bloque de Autoría Estilizado
     st.markdown("""
     <div style="font-size: 11px; line-height: 1.2; color: #555;">
         <b>Autor:</b> Bernardo Bautista Gutiérrez<br>
@@ -30,14 +30,9 @@ with st.sidebar:
     st.markdown("---")
     st.info("💎 Módulo de Procesamiento Masivo de Actas SIAGIE.")
 
-# --- ENCABEZADO PRINCIPAL ---
-col1, col2 = st.columns([1, 5])
-with col1:
-    st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=110) 
-with col2:
-    st.title("💎 MINKA-DATA: Procesador Web de Actas")
-    st.markdown("### 🏛️ UGEL Melgar - Innovación Tecnológica")
-
+# --- ENCABEZADO PRINCIPAL (Limpio y Profesional) ---
+st.title("💎 MINKA-DATA: Procesador Web de Actas")
+st.markdown("#### 🏛️ UGEL Melgar - Innovación Tecnológica")
 st.info("Bienvenido. Cargue las actas en PDF para consolidar la información en un solo archivo Excel.")
 
 # --- FUNCIONES DE LIMPIEZA Y PROCESAMIENTO ---
@@ -97,7 +92,7 @@ def procesar_acta_universal(pdf_file):
 
     return list(alumnos_acumulados.values())
 
-# --- CARGADOR CON LLAVE DINÁMICA ---
+# --- CARGADOR DE ARCHIVOS ---
 archivos_cargados = st.file_uploader(
     "📂 Selecciona o arrastra las actas PDF aquí", 
     type="pdf", 
