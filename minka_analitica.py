@@ -7,7 +7,6 @@ import io
 # 1. CONFIGURACIÓN E IDENTIDAD
 st.set_page_config(page_title="Minka-Data ANALÍTICA", page_icon="📈", layout="wide")
 
-# Inicialización de estado para limpiar datos
 if 'reset_key' not in st.session_state:
     st.session_state.reset_key = 0
 
@@ -15,15 +14,11 @@ def limpiar_datos():
     st.session_state.reset_key += 1
     st.rerun()
 
-# --- BARRA LATERAL ESTILIZADA ---
+# --- BARRA LATERAL ---
 with st.sidebar:
-    # Logo UGEL Melgar (Usamos el oficial del MINEDU)
     st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Logo_del_Ministerio_de_Educaci%C3%B3n_del_Per%C3%BA.svg/1200px-Logo_del_Ministerio_de_Educaci%C3%B3n_del_Per%C3%BA.svg.png", width=200)
-    
     st.markdown("### **UGEL MELGAR**")
     st.markdown("---")
-    
-    # Autoría en fuente menuda y estrecha
     st.markdown("""
     <div style="font-size: 11px; line-height: 1.2; color: #555;">
         <b>Autor:</b> Bernardo Bautista Gutiérrez<br>
@@ -31,15 +26,13 @@ with st.sidebar:
         <b>Cel:</b> 965 654 898
     </div>
     """, unsafe_allow_html=True)
-    
     st.markdown("---")
-    st.info("📊 Herramienta de Monitoreo Estratégico para el Liderazgo Pedagógico.")
+    st.info("📊 Monitoreo Estratégico para el Liderazgo Pedagógico.")
 
 # --- CUERPO PRINCIPAL ---
 st.title("📈 MINKA-DATA: Inteligencia de Gestión Educativa")
 st.markdown("#### 🏛️ Diagnóstico de Compromisos de Gestión Escolar (CGE 1 y 2)")
 
-# --- FUNCIONES ---
 def limpiar(t):
     return re.sub(r'\s+', ' ', str(t)).strip() if t else ""
 
@@ -56,8 +49,6 @@ def procesar_acta_universal(pdf_file):
             if not tabla: continue
             for fila in tabla:
                 f_str = [limpiar(c) for c in fila]
-                dni_raw = "".join([c for c in f_str if c.isdigit() and len(c) == 1])
-                # Ajuste para capturar DNI en el flujo de la tabla
                 dni_search = re.search(r'\d{8}', "".join(f_str))
                 if dni_search:
                     dni = dni_search.group(0)
@@ -72,14 +63,13 @@ def procesar_acta_universal(pdf_file):
                             break
     return list(alumnos_acumulados.values())
 
-# --- CARGA Y BOTONES ---
-archivos = st.file_uploader("📂 Cargue actas PDF (2023, 2024, 2025)", type="pdf", accept_multiple_files=True, key=f"up_{st.session_state.reset_key}")
+archivos = st.file_uploader("📂 Cargue actas PDF", type="pdf", accept_multiple_files=True, key=f"up_{st.session_state.reset_key}")
 
 col1, col2 = st.columns([2, 1])
 with col1:
     btn_generar = st.button("🚀 GENERAR REPORTE DE GESTIÓN EDUCATIVA", use_container_width=True)
 with col2:
-    btn_limpiar = st.button("♻️ LIMPIAR DATOS", on_click=limpiar_datos, use_container_width=True)
+    st.button("♻️ LIMPIAR DATOS", on_click=limpiar_datos, use_container_width=True)
 
 if archivos and btn_generar:
     data_total = []
@@ -89,7 +79,7 @@ if archivos and btn_generar:
     if data_total:
         df_base = pd.DataFrame(data_total)
         
-        # CGE 1 - Logros
+        # --- Lógica CGE 1 ---
         notas_list = []
         for reg in data_total:
             for n in reg["NOTAS"]:
@@ -100,7 +90,7 @@ if archivos and btn_generar:
         df_cge1['TOTAL'] = df_cge1.sum(axis=1)
         df_cge1_pct = df_cge1.iloc[:, :-1].div(df_cge1['TOTAL'], axis=0) * 100
 
-        # CGE 2 - Matrícula
+        # --- Lógica CGE 2 ---
         df_cge2 = df_base.groupby(['AÑO', 'SIT']).size().unstack(fill_value=0)
         df_cge2['TOTAL_MATR'] = df_cge2.sum(axis=1)
         df_cge2_pct = df_cge2.div(df_cge2['TOTAL_MATR'], axis=0) * 100
@@ -109,49 +99,64 @@ if archivos and btn_generar:
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df_base.to_excel(writer, sheet_name='DATOS_CRUDOS', index=False)
             workbook = writer.book
-            fmt_pct = workbook.add_format({'num_format': '0.00"%"'}) # Formato con 2 decimales
+            fmt_pct = workbook.add_format({'num_format': '0.00"%"'})
+            fmt_num = workbook.add_format({'num_format': '0'}) # Formato para números enteros
             
-            # --- HOJA CGE 1 ---
+            # --- PESTAÑA CGE 1 ---
             df_cge1.to_excel(writer, sheet_name='ANALISIS_CGE1', startrow=1)
             df_cge1_pct.to_excel(writer, sheet_name='ANALISIS_CGE1', startrow=len(df_cge1)+5)
             sh1 = writer.sheets['ANALISIS_CGE1']
-            sh1.set_column('B:G', 12, fmt_pct)
+            sh1.write('A1', 'TABLA 1: RECUENTO DE NIVELES DE LOGRO (DATOS NUMÉRICOS)')
+            sh1.write(f'A{len(df_cge1)+5}', 'TABLA 2: ANÁLISIS PORCENTUAL DE LOGROS (%)')
+            sh1.set_column('B:G', 12, fmt_num) # Tabla 1 en enteros
+            for r in range(len(df_cge1)): sh1.set_row(len(df_cge1)+6+r, None, fmt_pct) # Tabla 2 en %
             
-            # Gráfico de Logros con Porcentajes
             chart1 = workbook.add_chart({'type': 'column'})
             colores = {'AD': '#0070C0', 'A': '#00B050', 'B': '#FFC000', 'C': '#FF0000'}
             for i, nivel in enumerate(orden):
                 chart1.add_series({
-                    'name':       ['ANALISIS_CGE1', 1, i+1],
+                    'name': ['ANALISIS_CGE1', 1, i+1],
                     'categories': ['ANALISIS_CGE1', 2, 0, len(df_cge1)+1, 0],
-                    # Gráfico basado en la tabla de porcentajes
-                    'values':     ['ANALISIS_CGE1', len(df_cge1)+6, i+1, len(df_cge1)*2+5, i+1],
-                    'fill':       {'color': colores.get(nivel)},
+                    'values': ['ANALISIS_CGE1', len(df_cge1)+6, i+1, len(df_cge1)*2+5, i+1],
+                    'fill': {'color': colores.get(nivel)},
                     'data_labels': {'value': True, 'num_format': '0.00"%"'}
                 })
-            chart1.set_title({'name': 'Niveles de Logro (%) - CGE 1'})
             sh1.insert_chart('J2', chart1)
 
-            # --- HOJA CGE 2 ---
+            # --- PESTAÑA CGE 2 ---
             df_cge2.to_excel(writer, sheet_name='ANALISIS_CGE2', startrow=1)
             df_cge2_pct.to_excel(writer, sheet_name='ANALISIS_CGE2', startrow=len(df_cge2)+5)
             sh2 = writer.sheets['ANALISIS_CGE2']
-            sh2.set_column('B:M', 12, fmt_pct) # Formato porcentaje a la tabla de CGE2
+            sh2.write('A1', 'TABLA 1: SITUACIÓN FINAL (DATOS NUMÉRICOS)')
+            sh2.write(f'A{len(df_cge2)+5}', 'TABLA 2: DISTRIBUCIÓN PORCENTUAL DE TRAYECTORIAS (%)')
+            sh2.set_column('B:M', 12, fmt_num) # Tabla 1 en enteros
+            for r in range(len(df_cge2)): sh2.set_row(len(df_cge2)+6+r, None, fmt_pct) # Tabla 2 en %
             
-            # Gráfico de Tendencia Histórica (Línea)
+            # Gráfico Línea de Tendencia (Números Enteros)
             chart_tend = workbook.add_chart({'type': 'line'})
-            col_total = df_cge2.columns.get_loc('TOTAL_MATR') + 1
+            col_t = df_cge2.columns.get_loc('TOTAL_MATR') + 1
             chart_tend.add_series({
-                'name': 'Tendencia Matrícula Total',
+                'name': 'Matrícula Total',
                 'categories': ['ANALISIS_CGE2', 2, 0, len(df_cge2)+1, 0],
-                'values':     ['ANALISIS_CGE2', 2, col_total, len(df_cge2)+1, col_total],
-                'line':       {'color': '#FF5733', 'width': 2.5},
-                'marker':     {'type': 'circle', 'size': 8},
-                'data_labels': {'value': True}
+                'values': ['ANALISIS_CGE2', 2, col_t, len(df_cge2)+1, col_t],
+                'line': {'color': '#FF5733', 'width': 3},
+                'marker': {'type': 'circle', 'size': 8},
+                'data_labels': {'value': True, 'num_format': '0'} # Etiquetas en enteros
             })
-            chart_tend.set_title({'name': 'Histórico de Matrícula Escolar (Tendencia)'})
             sh2.insert_chart('J2', chart_tend)
 
+            # NUEVO: Gráfico Situación Final (Datos Numéricos)
+            chart_sit = workbook.add_chart({'type': 'column'})
+            for i, sit in enumerate(df_cge2.columns[:-1]):
+                chart_sit.add_series({
+                    'name': ['ANALISIS_CGE2', 1, i+1],
+                    'categories': ['ANALISIS_CGE2', 2, 0, len(df_cge2)+1, 0],
+                    'values': ['ANALISIS_CGE2', 2, i+1, len(df_cge2)+1, i+1],
+                    'data_labels': {'value': True, 'num_format': '0'}
+                })
+            chart_sit.set_title({'name': 'Distribución por Situación Final (Cantidades)'})
+            sh2.insert_chart('J18', chart_sit)
+
         st.balloons()
-        st.success("✅ Diamante 2 actualizado y listo.")
-        st.download_button("📥 Descargar Reporte Final", data=output.getvalue(), file_name="Minka_Analisis_Final.xlsx")
+        st.success("✅ Diamante 2: Pulido Final Completado.")
+        st.download_button("📥 Descargar Reporte UGEL Melgar", data=output.getvalue(), file_name="Minka_Analisis_Final.xlsx")
