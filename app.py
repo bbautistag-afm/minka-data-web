@@ -11,10 +11,29 @@ st.set_page_config(page_title="Minka-Data Melgar", page_icon="💎", layout="wid
 if 'reset_key' not in st.session_state:
     st.session_state.reset_key = 0
 
+# --- NUEVA BARRA LATERAL DE AUTORÍA ---
+with st.sidebar:
+    # Logo UGEL Melgar 
+    st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=180)
+    st.markdown("### **UGEL MELGAR**")
+    st.markdown("---")
+    
+    # Bloque de Autoría con estilo profesional y estrecho
+    st.markdown("""
+    <div style="font-size: 11px; line-height: 1.2; color: #555;">
+        <b>Autor:</b> Bernardo Bautista Gutiérrez<br>
+        <b>Email:</b> bbautistag@ugelmelgar.edu.pe<br>
+        <b>Cel:</b> 965 654 898
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    st.info("💎 Módulo de Procesamiento Masivo de Actas SIAGIE.")
+
+# --- ENCABEZADO PRINCIPAL ---
 col1, col2 = st.columns([1, 5])
 with col1:
-    # Tu escudo oficial de la UGEL Melgar (vía ImgBB o link directo)
-    st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=110) # He usado el ID de tu última captura
+    st.image("https://i.ibb.co/k2n2fHLZ/Logo-UGEL-Melgar-especial.png", width=110) 
 with col2:
     st.title("💎 MINKA-DATA: Procesador Web de Actas")
     st.markdown("### 🏛️ UGEL Melgar - Innovación Tecnológica")
@@ -29,7 +48,6 @@ def procesar_acta_universal(pdf_file):
     alumnos_acumulados = {}
     nombre_archivo = pdf_file.name
     
-    # Nomenclatura del archivo
     partes = nombre_archivo.replace('.pdf', '').split(' - ')
     cod_modular = partes[0] if len(partes) > 0 else "N/A"
     nombre_ie = partes[1] if len(partes) > 1 else "IE DESCONOCIDA"
@@ -116,7 +134,6 @@ if archivos_cargados:
                 st.error("No se encontraron datos válidos.")
 
     with col_btn2:
-        # BOTÓN DE LIMPIEZA ATÓMICA
         if st.button("♻️ LIMPIAR PARA NUEVA CARGA"):
             st.session_state.reset_key += 1
             st.rerun()
