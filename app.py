@@ -11,7 +11,7 @@ st.set_page_config(page_title="Minka-Data Melgar", page_icon="💎", layout="wid
 col1, col2 = st.columns([1, 5])
 with col1:
     # He puesto un logo genérico de educación, pero puedes cambiarlo por la URL del logo de la UGEL Melgar
-    st.image("https://drive.google.com/uc?export=view&id=1cGVMXE6RdzgsVXGbWIUGgVZDbfXReQhb", width=100)
+    st.image("https://drive.google.com/uc?export=view&id=1LoLi7jyNnCRLXakuatIh-5IcADae_V4a", width=100)
 with col2:
     st.title("💎 MINKA-DATA: Procesador Web de Actas")
     st.markdown("### 🏛️ UGEL Melgar - Innovación Tecnológica")
