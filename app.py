@@ -32,7 +32,7 @@ with st.sidebar:
 
 # --- ENCABEZADO PRINCIPAL (Limpio y Profesional) ---
 st.title("💎 MINKA-DATA: Procesador Web de Actas")
-st.markdown("#### 🏛️ UGEL Melgar - Innovación Tecnológica")
+st.markdown("#### 🏛️ Procesamiento de Datos para Tablero de Gestión del Aprendizaje")
 st.info("Bienvenido. Cargue las actas en PDF para consolidar la información en un solo archivo Excel.")
 
 # --- FUNCIONES DE LIMPIEZA Y PROCESAMIENTO ---
